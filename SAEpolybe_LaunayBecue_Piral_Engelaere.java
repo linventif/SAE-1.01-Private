@@ -1,4 +1,4 @@
-class SAEpolybe_NOM1_NOM2_NOM3 extends Program {
+class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
 
     final int LARGEUR = 5;  // taille du carré (5x5 dans notre cas)
 
@@ -6,7 +6,8 @@ class SAEpolybe_NOM1_NOM2_NOM3 extends Program {
 
     // La fonction String initialiserCarre() retourne une chaine de caractères contenant le carré de Polybe (version de base, sans clé, c'est-à-dire la chaine "ABCDEFGHIJKLMNOPQRSTUVXYZ", le V et le W sont "fusionnés" en V)
     String initialiserCarreSimple(){
-        return "";
+        String carre = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
+        return carre;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -24,8 +25,22 @@ class SAEpolybe_NOM1_NOM2_NOM3 extends Program {
     // NB : On considère dans cette fonction que le carré passé en paramètre est valide (càd constitué de 25 lettres distinctes en majuscule, le W se substituant en V)
 
     void afficherCarre(String carre){
+        int k = 0;
+        print(" |");
+        for (int i = 0; i < LARGEUR; i++) {
+            print(i + " ");
+        }
+        println();
+        println("------------");
+        for (int i = 0; i < LARGEUR; i++) {
+            print(i + "|");
+            for (int j = 0; j < LARGEUR; j++) {
+                print(carre.charAt(k) + " ");
+                k++;
+            }
+            println();
+        }
     }
-
     //////////////////////////////////////////////////////////////////////////
 
     // La fonction String coderLettre (String carre, char lettre) retourne une chaîne de 2 caractères (2 entiers entre 0 inclus et LARGEUR exclus) contenant l'encodage du caractère lettre passé en paramètre en considérant le carré de Polybe carre également passé en paramètre.
@@ -190,6 +205,7 @@ class SAEpolybe_NOM1_NOM2_NOM3 extends Program {
 
     void algorithm(){
         println("SAE1.01 - Le carré de Polybe");
+        afficherCarre(initialiserCarreSimple());
     }
     //////////////////////////////////////////////////////////////////////////
 }
