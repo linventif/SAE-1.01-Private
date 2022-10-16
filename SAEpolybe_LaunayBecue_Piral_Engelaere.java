@@ -25,18 +25,12 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     // NB : On considère dans cette fonction que le carré passé en paramètre est valide (càd constitué de 25 lettres distinctes en majuscule, le W se substituant en V)
 
     void afficherCarre(String carre){
-        int k = 0;
-        print(" |");
-        for (int i = 0; i < LARGEUR; i++) {
-            print(i + " ");
-        }
-        println();
+        println(" |0 1 2 3 4");
         println("------------");
         for (int i = 0; i < LARGEUR; i++) {
             print(i + "|");
             for (int j = 0; j < LARGEUR; j++) {
-                print(carre.charAt(k) + " ");
-                k++;
+                print(carre.charAt(i * LARGEUR + j) + " ");
             }
             println();
         }
@@ -68,7 +62,15 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     // Indication : pensez à la division entière et au modulo
 
     String coderLettre(String carre, char lettre){
-        return "";
+        for (int i = 0; i < carre.length(); i++) {
+            if (lettre == 'W') {
+                lettre = 'V';
+            }
+            if (carre.charAt(i) == lettre) {
+                return ("" + i / LARGEUR) + "" + (i % LARGEUR);
+            }
+        }
+        return ("error");
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -82,7 +84,11 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     // NB : On considère dans cette fonction que le message passé en paramètre est valide (càd constitué uniquement des 26 lettres de l'alphabet en majuscule)
 
     String coderMessage(String carre, String message){
-        return "";
+        String msg_coded = "";
+        for (int i = 0; i < message.length(); i++) {
+            msg_coded += coderLettre(carre, message.charAt(i)) + " ";
+        }
+        return (msg_coded);
     }
     //////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +99,11 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     // NB : On considère dans cette fonction que le message codé passé en paramètre est valide (càd constitué de paires d'entiers compris entre 0 et LARGEUR-1 inclus et séparées par un espace)
 
     String decoderMessage(String carre, String messageCode){
-        return "";
+        String msg_decoded = "";
+        for (int i = 0; i < messageCode.length(); i += 3) {
+            msg_decoded += carre.charAt((messageCode.charAt(i) - '0') * LARGEUR + (messageCode.charAt(i + 1) - '0'));
+        }
+        return (msg_decoded);
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -105,7 +115,12 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     //      si mot = "BONJOUR" et lettre = 'M' alors le résultat de la fonction est False
 
     boolean estPresent(String mot, char lettre){
-        return true;
+        for (int i = 0; i < mot.length(); i++) {
+            if (mot.charAt(i) == lettre) {
+                return (true);
+            }
+        }
+        return (false);
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -118,7 +133,27 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     // NB : On considère dans cette fonction que la clé passée en paramètre est valide (càd constituée uniquement de lettres de l'alphabet en majuscule, le W se substituera en V)
 
     String initialiserCarreAvecCle(String cle){
-        return "";
+        String carre = "";
+        for (int i = 0; i < length(cle); i++) {
+            char lettre = charAt(cle, i);
+            if (lettre == 'W') {
+                lettre = 'V';
+            }
+            if (!estPresent(carre, lettre)) {
+                carre += lettre;
+            }
+        }
+        for (int i = 0; i < (50-length(carre)); i++) {
+            char lettre = 'A';
+            lettre += i;
+            if (lettre == 'W') {
+                lettre = 'V';
+            }
+            if (!estPresent(carre, lettre)) {
+                carre += lettre;
+            }
+        }
+        return (carre);
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -205,7 +240,16 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
 
     void algorithm(){
         println("SAE1.01 - Le carré de Polybe");
-        afficherCarre(initialiserCarreSimple());
+        print(" Message a coder -> ");
+        String msg_to_code = readString();
+        print(" Carre -> ");
+        String carre = initialiserCarreAvecCle(readString());
+        String msg_coded = coderMessage(carre, msg_to_code);
+        String msg_decoded = decoderMessage(carre, msg_coded);
+        println("Message à coder : " + msg_to_code);
+        afficherCarre(carre);
+        println("Message codé : " + msg_coded);
+        println("Message décodé : " + msg_decoded);
     }
     //////////////////////////////////////////////////////////////////////////
 }
