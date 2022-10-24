@@ -100,8 +100,8 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
 
     String decoderMessage(String carre, String messageCode){
         String msg_decoded = "";
-        for (int i = 0; i < messageCode.length(); i += 3) {
-            msg_decoded += carre.charAt((messageCode.charAt(i) - '0') * LARGEUR + (messageCode.charAt(i + 1) - '0'));
+        for (int i = 0; i < length(messageCode); i += 3) {
+            msg_decoded += carre.charAt((charAt(messageCode, i) - '0') * LARGEUR + (charAt(messageCode, i + 1) - '0'));
         }
         return (msg_decoded);
     }
@@ -193,7 +193,7 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
         return (true);
     }
 
-    //////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////decoderMessage/////////////////////////////
 
     // La fonction estChiffreOK vérifie que le chiffre passé en paramètre est valide (càd est un entier compris entre 0 et LARGEUR-1)
     // Par exemple :
@@ -204,7 +204,7 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     //  si messageCode=""01242314244032", la fonction retourne false
 
     boolean estChiffreOK(int chiffre){
-        if (chiffre >= 0 && chiffre <= LARGEUR-1) {
+        if (chiffre >= 0 && chiffre <= 4) {
             return (true);
         } else {
             return (false);
@@ -223,18 +223,16 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
 
     boolean estMessageCodeValide(String messageCode){
         if (length(messageCode) % 3 != 0) {
+            println("Longueur du message invalide");
             return (false);
         }
         for (int i = 0; i < (length(messageCode)); i++) {
-            if (i%3 == 0) {
-                if (charAt(messageCode, i) != ' ') {
-                    return (false);
-                }
-            } else {
-                int chiffre = charAt(messageCode, i) - '0';
-                if (!estChiffreOK(chiffre)) {
-                    return (false);
-                }
+            if ((i+1)%3 == 0 && i != 0 && charAt(messageCode, i) != ' ') {
+                println("Le message code doit etre compose de paires d'entiers separes par un espace" + i);
+                return (false);
+            } else if ((i+1)%3 != 0 && !estChiffreOK(charAt(messageCode, i)-'0')) {
+                println("Le message code doit etre compose de paires d'entiers separes par un espace" + i);
+                return (false);
             }
         }
         return (true);
@@ -272,91 +270,102 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     // NB : si et tant qu'une saisie de l'utilisateur n'est pas correcte, il faut la redemander (que ce soit pour la clé, le message à coder, le message à décoder ou le choix dans le menu)
 
     void algorithm(){
-        println("Bienvenue dans le programme de codage/décodage de Polybe");
+        println(" ");
+        println(" -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --");
+        println(" ");
+        println("      Bienvenue dans le programme de codage/décodage de Polybe");
+        println(" ");
+        println(" -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --");
+        println(" ");
         println("Voulez-vous utiliser une clé ? (oui/non)");
+            print(" -> ");
         String reponse = readString();
         while (!reponse.equals("oui") && !reponse.equals("non")) {
             println("Veuillez répondre par oui ou non");
+            print(" -> ");
             reponse = readString();
         }
+        println(" ");
+        println("Voici votre carré de Polybe :");
+        String cle = initialiserCarreSimple();
         if (reponse.equals("oui")) {
             println("Veuillez saisir la clé");
-            String cle = readString();
+            print(" -> ");
+            cle = readString();
             while (!estCleValide(cle)) {
+                println(" ");
                 println("Veuillez saisir une clé valide");
+                print(" -> ");
                 cle = readString();
             }
-            afficherCarre(cle);
-        } else {
-            afficherCarre();
         }
+        afficherCarre(initialiserCarreAvecCle(cle));
+        println(" ");
         println("Que voulez-vous faire ?");
         println("0. Quitter");
         println("1. Coder un message");
         println("2. Décoder un message");
         println("3. Modifier le mode avec/sans clé");
+        print(" -> ");
         int choix = readInt();
         while (choix != 0) {
             if (choix == 1) {
                 println("Veuillez saisir le message à coder");
+                print(" -> ");
                 String message = readString();
                 while (!estMessageValide(message)) {
+                    println(" ");
                     println("Veuillez saisir un message valide");
+                    print(" -> ");
                     message = readString();
                 }
-                if (reponse.equals("oui")) {
-                    println("Le message codé est : " + code(message, cle));
-                } else {
-                    println("Le message codé est : " + code(message));
-                }
+                println("Le message codé est : |" + coderMessage(initialiserCarreAvecCle(cle), message) + "|");
             } else if (choix == 2) {
                 println("Veuillez saisir le message à décoder");
+                print(" -> ");
                 String messageCode = readString();
                 while (!estMessageCodeValide(messageCode)) {
+                    println(" ");
                     println("Veuillez saisir un message codé valide");
+                    print(" -> ");
                     messageCode = readString();
                 }
-                if (reponse.equals("oui")) {
-                    println("Le message décodé est : " + decoderMessage(messageCode, cle));
-                } else {
-                    println("Le message décodé est : " + decoderMessage(messageCode));
-                }
+                println("Le message décodé est : " + decoderMessage(initialiserCarreAvecCle(cle), messageCode));
             } else if (choix == 3) {
+                println(" ");
+                println("Voulez-vous utiliser une clé ? (oui/non)");
+                print(" -> ");
+                reponse = readString();
+                while (!reponse.equals("oui") && !reponse.equals("non")) {
+                    println("Veuillez répondre par oui ou non");
+                    print(" -> ");
+                    reponse = readString();
+                }
                 if (reponse.equals("oui")) {
-                    reponse = "non";
-                    afficherCarre();
-                } else {
-                    reponse = "oui";
                     println("Veuillez saisir la clé");
-                    String cle = readString();
+                    print(" -> ");
+                    cle = readString();
                     while (!estCleValide(cle)) {
                         println("Veuillez saisir une clé valide");
+                        print(" -> ");
                         cle = readString();
                     }
-                    afficherCarre(cle);
                 }
+                afficherCarre(initialiserCarreAvecCle(cle));
             } else {
-                println("Veuillez saisir un entier entre 0 et 3");
+                println("Veuillez saisir un choix valide");
             }
+            println(" -- -- -- -- -- -- -- -- -- -- ");
             println("Que voulez-vous faire ?");
             println("0. Quitter");
             println("1. Coder un message");
             println("2. Décoder un message");
             println("3. Modifier le mode avec/sans clé");
+            print(" -> ");
             choix = readInt();
         }
+        println(" ");
+        println("Au revoir !");
+        println(" ");
     }
-        /*
-        println("SAE1.01 - Le carré de Polybe");
-        print(" Message a coder -> ");
-        String msg_to_code = readString();
-        print(" Carre -> ");
-        String carre = initialiserCarreAvecCle(readString());
-        String msg_coded = coderMessage(carre, msg_to_code);
-        String msg_decoded = decoderMessage(carre, msg_coded);
-        println("Message à coder : " + msg_to_code);
-        afficherCarre(carre);
-        println("Message codé : " + msg_coded);
-        println("Message décodé : " + msg_decoded);*/
-    //////////////////////////////////////////////////////////////////////////
 }
