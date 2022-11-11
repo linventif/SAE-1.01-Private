@@ -228,10 +228,10 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
         }
         for (int i = 0; i < (length(messageCode)); i++) {
             if ((i+1)%3 == 0 && i != 0 && charAt(messageCode, i) != ' ') {
-                println("Le message code doit etre compose de paires d'entiers separes par un espace" + i);
+                println("Le message code doit etre compose de paires d'entiers separes par un espace " + i);
                 return (false);
             } else if ((i+1)%3 != 0 && !estChiffreOK(charAt(messageCode, i)-'0')) {
-                println("Le message code doit etre compose de paires d'entiers separes par un espace" + i);
+                println("Le message code doit etre compose de paires d'entiers separes par un espace " + i);
                 return (false);
             }
         }
@@ -269,7 +269,7 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     //        puis agit en conséquence.
     // NB : si et tant qu'une saisie de l'utilisateur n'est pas correcte, il faut la redemander (que ce soit pour la clé, le message à coder, le message à décoder ou le choix dans le menu)
 
-    void algorithm(){
+    void algorithm(){/*
         println(" ");
         println(" -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --");
         println(" ");
@@ -366,6 +366,12 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
         }
         println(" ");
         println("Au revoir !");
-        println(" ");
+        println(" ");*/
+        // DEGUB
+        if (estMessageCodeValide(readString())) {
+            println("OK");
+        } else {
+            println("NO");
+        }
     }
 }
