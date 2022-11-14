@@ -269,7 +269,7 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
     //        puis agit en conséquence.
     // NB : si et tant qu'une saisie de l'utilisateur n'est pas correcte, il faut la redemander (que ce soit pour la clé, le message à coder, le message à décoder ou le choix dans le menu)
 
-    void algorithm(){/*
+    void algorithm(){
         println(" ");
         println(" -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --");
         println(" ");
@@ -366,12 +366,6 @@ class SAEpolybe_LaunayBecue_Piral_Engelaere extends Program {
         }
         println(" ");
         println("Au revoir !");
-        println(" ");*/
-        // DEGUB
-        if (estMessageCodeValide(readString())) {
-            println("OK");
-        } else {
-            println("NO");
-        }
+        println(" ");
     }
 }
